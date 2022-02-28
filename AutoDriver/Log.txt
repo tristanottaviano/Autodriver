@@ -1,0 +1,65 @@
+*************** Testing Point Object ***************
+Testing the creation of an empty point
+	Pass
+Testing the creation of a preconfigure point
+	Pass
+
+
+
+*************** Testing Car Object ***************
+Testing the creation of an empty car:
+	Angle : Pass
+	Speed : Pass
+	Position : Pass
+
+Testing the creation of an full car
+	Angle : Pass
+	Speed : Pass,
+	Position : Pass
+
+Testing Get_Point_Toward function
+	Test 1 : Pass
+	Test 2 : Pass
+
+Testing Go_Forward function
+	Pass
+*************** Testing turn calculation ***************
+Testing straight road
+	Pass
+Testing both sidewalk road
+	Pass
+Testing left sidewalk road
+	Pass
+Testing right sidewalk road
+	Pass
+Testing Blocked/Walled road
+	Turn: Pass
+Testing Rock on the road
+	Turn: Pass
+Testing left wall road
+	Turn: Pass
+Testing Right wall road
+	Turn: Pass
+Testing rock + sidewalks
+	Turn: Pass
+Testing Left obs + sidewalks
+	Turn: Pass
+Testing Right obs + sidewalks
+	Turn: Pass
+
+
+*************** Testing distance between cars ***************
+Testing Car alone
+	Pass
+Testing Car Behind & Front
+	Pass
+Testing Car Behind
+	Pass
+Testing Car in Front
+	Pass
+Testing Car on the right
+	Pass
+Testing Car on the left
+	Pass
+
+
