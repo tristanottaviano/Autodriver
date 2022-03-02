@@ -24,7 +24,7 @@ Testing Get_Point_Toward function
 Testing Go_Forward function
 	Pass
 *************** Testing turn calculation ***************
-Testing straight road
+Testing empty road
 	Pass
 Testing both sidewalk road
 	Pass

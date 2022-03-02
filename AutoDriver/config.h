@@ -15,4 +15,5 @@
 #define SW_ZOOM 2
 
 #define TARGET_LINE_LENGTH 20
+#define CAR_SIZE 10
 

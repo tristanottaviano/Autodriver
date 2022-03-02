@@ -66,23 +66,31 @@ double Car::calculateTurn(){
     SDL_Color cyan = {0, 255, 255};
     SDL_Color blue = {0, 0, 255};
     SDL_Color gray = {100, 100, 100};
+    double WeightCoef=1.0;
 
     //Front Sensor
     for(int i=0; i<FRONT_SENSOR_DEPTH; i++){
         for(int j=0; j<SIZE_OF_SENSOR; j++){
             
+            if (i<FRONT_SENSOR_DEPTH*0.2){
+                WeightCoef = pow(FRONT_SENSOR_DEPTH - i,2)/pow(FRONT_SENSOR_DEPTH,2);            
+            }
+            else {
+                WeightCoef = (FRONT_SENSOR_DEPTH - i)/(double)FRONT_SENSOR_DEPTH;
+            }
+
             if(compareColor(frontSensor[i][j], magenta) || compareColor(frontSensor[i][j], cyan) || compareColor(frontSensor[i][j], blue)){
-                R += frontSensor[i][j].r * ((FRONT_SENSOR_DEPTH - i)/(double)FRONT_SENSOR_DEPTH);
-                G += frontSensor[i][j].g * ((FRONT_SENSOR_DEPTH - i)/(double)FRONT_SENSOR_DEPTH);
-                B += frontSensor[i][j].b * ((FRONT_SENSOR_DEPTH - i)/(double)FRONT_SENSOR_DEPTH);
+                R += frontSensor[i][j].r * WeightCoef;
+                G += frontSensor[i][j].g * WeightCoef;
+                B += frontSensor[i][j].b * WeightCoef;
             }
  
             if(compareColor(frontSensor[i][j], gray)){
                 if(j<SIZE_OF_SENSOR*2/5){
-                    grayLeft+= ((FRONT_SENSOR_DEPTH - i)/(double)FRONT_SENSOR_DEPTH) * abs(SIZE_OF_SENSOR/2 - abs(SIZE_OF_SENSOR/2-j));
+                    grayLeft+= WeightCoef * abs(SIZE_OF_SENSOR/2 - abs(SIZE_OF_SENSOR/2-j));
                 }
                 else if(j>SIZE_OF_SENSOR*3/5){
-                    grayRight+= ((FRONT_SENSOR_DEPTH - i)/(double)FRONT_SENSOR_DEPTH) * abs(SIZE_OF_SENSOR/2 - abs(SIZE_OF_SENSOR/2-j));
+                    grayRight+= WeightCoef * abs(SIZE_OF_SENSOR/2 - abs(SIZE_OF_SENSOR/2-j));
                 }
             }
 
@@ -96,7 +104,7 @@ double Car::calculateTurn(){
 
                     if (i<FULL_STOP_DISTANCE/10 && speed>-baseSpeed*0.1){
                         //speed = baseSpeed * (1 - (double)abs(FULL_STOP_DISTANCE - obsDist)/(double)FULL_STOP_DISTANCE);
-                        speed--;
+                        //speed--;
                     }
 
                 }
@@ -123,7 +131,7 @@ double Car::calculateTurn(){
     //Calculate the turn value
     double turn;
     if(B!=0){
-        turn = ((FRONT_SENSOR_DEPTH*0.6)*(grayRight - grayLeft) + R - G)/B;
+        turn = ((FRONT_SENSOR_DEPTH*0.4)*(grayRight - grayLeft) + R - G)/B;
     }
 
     else {
@@ -136,7 +144,7 @@ double Car::calculateTurn(){
 
 void Car::turnCar(double turn){
 
-    turn = PID(turn, 20.0, 2.0, 0.5);
+    turn = PID(turn, 15.0, 2.0, 1);
     angle += turn;
     //printf("Speed: %d\t Angle:%lf\t TurnDiff:%lf\n", speed, angle, turn);
 
@@ -211,18 +219,19 @@ void Car::createDistanceFromCars(Car carArray[], int numberOfCar){
         double vectAngle = atan2(determinant, dotProduct);
 
         if(abs(vectAngle)<M_PI/6 && speed>0){
-            speed--;
+            if(distance<CAR_SAFETY_DISTANCE*0.1) speed=0;
+            else speed--;
         }
 
         else if(abs(vectAngle)>5*M_PI/6 && speed<baseSpeed*1.25){
             speed++;
         }
 
-        else if (vectAngle>0 && distance<CAR_SAFETY_DISTANCE/2){
+        else if (vectAngle>0 && distance<CAR_SAFETY_DISTANCE){
             angle--;   
         }
         
-        else if (vectAngle<0 && distance<CAR_SAFETY_DISTANCE/2){
+        else if (vectAngle<0 && distance<CAR_SAFETY_DISTANCE){
             angle++;
         }
 

@@ -395,7 +395,7 @@ void testSequence(){
 
     
     //Loading Background
-    testImage = SDL_LoadBMP("/home/tristan/Desktop/TS/Projet/Source/TestRoad.bmp");
+    testImage = SDL_LoadBMP("/home/tristan/Desktop/TS/AutoDriver/Source/Road2.bmp");
     if (testImage == NULL) {
         SDL_GetError();
         printf("[DEBUG] > %s\n", SDL_GetError());

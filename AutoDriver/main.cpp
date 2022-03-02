@@ -45,11 +45,12 @@ void renderState(SDL_Renderer* render, SDL_Texture* background){
 
         //Rect
         SDL_SetRenderDrawColor(render, 255, 255* (1 - (double)abs(carArray[i].baseSpeed - carArray[i].speed)/(double)carArray[i].baseSpeed), 0, 255);
-        SDL_Rect carRect = {(int)carArray[i].position.x - 5 ,(int)carArray[i].position.y - 5, 10, 10};
+        SDL_Rect carRect = {(int)carArray[i].position.x - CAR_SIZE/2 ,(int)carArray[i].position.y - CAR_SIZE/2, CAR_SIZE, CAR_SIZE};
         SDL_RenderFillRect(render, &carRect);
 
         //Line
-        Point target = carArray[i].getPointToward(TARGET_LINE_LENGTH);
+        //Point target = carArray[i].getPointToward(TARGET_LINE_LENGTH);
+        Point target = carArray[i].getPointToward(TARGET_LINE_LENGTH*(1-(double)(carArray[i].baseSpeed - carArray[i].speed)/carArray[i].baseSpeed));
         SDL_RenderDrawLine(render, (int)carArray[i].position.x ,(int)carArray[i].position.y, (int)target.x, (int)target.y);
 
 
@@ -131,14 +132,8 @@ void updateState(){
 void init(){
 
     for(int i=0; i<NUMBER_OF_CARS; i++){
-/*
-        carArray[i].position.x = 5;
-        carArray[i].position.y = 51+i*100;
-        carArray[i].baseSpeed = 5;
-        carArray[i].angle = 0;
- */
 
-         carArray[i].baseSpeed = 30;
+        carArray[i].baseSpeed = 30;
         carArray[i].speed = carArray[i].baseSpeed;
         carArray[i].angle = 0;
         carArray[i].position.x = 5 + (rand()%50);
@@ -185,7 +180,7 @@ int main(int argc, char* argv[])
 
 
     //Loading Background
-    image = SDL_LoadBMP("/home/tristan/Desktop/TS/Projet/Source/Road2.bmp");
+    image = SDL_LoadBMP("/home/tristan/Desktop/TS/AutoDriver/Source/Road1.bmp");
     if (image == NULL) {
         SDL_GetError();
         printf("[DEBUG] > %s\n", SDL_GetError());
